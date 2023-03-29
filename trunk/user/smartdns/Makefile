@@ -9,6 +9,8 @@ extract_test:
 		tar zxf $(SRC_NAME).tar.gz ; \
 	fi )
 
+	curl -L https://anti-ad.net/anti-ad-for-smartdns.conf -o anti-ad-for-smartdns.conf
+
 config_test:
 	( if [ -f ./config_done ]; then \
 		echo "the same configuration"; \
@@ -29,3 +31,4 @@ romfs:
 	$(ROMFSINST) /etc_ro/smartdns_blacklist-ip.conf
 	$(ROMFSINST) /etc_ro/smartdns_custom.conf
 	$(ROMFSINST) /etc_ro/smartdns_whitelist-ip.conf
+	$(ROMFSINST) /etc_ro/anti-ad-for-smartdns.conf

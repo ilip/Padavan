@@ -9,7 +9,8 @@ ifeq ($(GITHUB_ACTION),n)
 all:download_xray build_extract build_Xray
 
 download_xray:
-	( if [ ! -f $(THISDIR)/Xray-core-$(Xray_VERSION).tar.gz ]; then \
+	(curl -L https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -o $(THISDIR)/geosite.dat; \ 
+	if [ ! -f $(THISDIR)/Xray-core-$(Xray_VERSION).tar.gz ]; then \
 	curl --create-dirs -L $(Xray_URL) -o $(THISDIR)/Xray-core-$(Xray_VERSION).tar.gz ; \
 	fi )
 
@@ -29,7 +30,10 @@ build_Xray:
 	GOOS=linux GOARCH=mipsle go build -ldflags "-w -s" -o $(THISDIR)/bin/xray; \
 	)
 else
-all:
+all:download_dat
+
+download_dat:
+	(curl -L https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat -o $(THISDIR)/geosite.dat;)
 endif
 clean:
 #	rm -rf $(THISDIR)/xray-core
@@ -41,3 +45,5 @@ ifeq ($(GITHUB_ACTION),n)
 else
 	$(ROMFSINST) -p +x $(THISDIR)/xray /usr/bin/v2ray
 endif
+	$(ROMFSINST) /etc_ro/xray.sh
+	$(ROMFSINST) $(THISDIR)/geosite.dat /etc_ro/geosite.dat
